@@ -28,6 +28,7 @@ from schemas import (
 import crud
 from auth import hash_password, verify_password
 from security import create_access_token, get_current_user
+from fastapi.middleware.cors import CORSMiddleware
 
 # -------------------------------
 # App init
@@ -39,12 +40,9 @@ app = FastAPI(title="Student Management API with JWT Auth")
 # -------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:5500",
-        "http://localhost:5500"
-    ],
+    allow_origins=["*"],      # frontend URL yahan allow hota hai
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["*"],      # GET, POST, PUT, DELETE
     allow_headers=["*"],
 )
 
@@ -70,8 +68,7 @@ def get_db():
 # -------------------------------
 @app.get("/")
 def root():
-    return {"message": "Student API with JWT Auth is running 🚀"}
-
+    return {"message": "Backend running successfully"}
 # =====================================================
 # AUTHENTICATION ROUTES
 # =====================================================
