@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Background overlay -->
+  <div class="overlay"></div>
+
+  <!-- ===============================
+       DASHBOARD WRAPPER
+  ================================ -->
+  <div class="dashboard-wrapper">
+
+    <!-- ===============================
+         SIDEBAR
+    ================================ -->
+    <aside class="sidebar">
+      <h3>Dashboard</h3>
+
+      <a href="dashboard.html">🏠 Home</a>
+      <a href="students.html">👨‍🎓 View Students</a>
+      <a href="add_edit_student.html">➕ Add Student</a>
+      <a href="#" onclick="logout()">🚪 Logout</a>
+    </aside>
+
+    <!-- ===============================
+         MAIN CONTENT
+    ================================ -->
+    <main class="main-content">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <h2>Student Management System</h2>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+
+      <!-- Status message -->
+      <p id="status" style="margin-bottom: 20px;"></p>
+
+      <!-- Dashboard cards -->
+      <div class="cards">
+        <div class="card">
+          <h3>✔</h3>
+          <p>Login Successful</p>
+        </div>
+
+        <div class="card">
+          <h3>📊</h3>
+          <p>Manage Students</p>
+        </div>
+
+        <div class="card">
+          <h3>🔐</h3>
+          <p>Secure JWT Access</p>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div style="margin-top: 30px;">
+        <button class="btn" onclick="goStudents()">View Students</button>
+        <button class="btn outline" onclick="goAddStudent()">Add Student</button>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ===============================
+       SCRIPT SECTION
+  ================================ -->
+  <script>
+    // =================================
+    // AUTH GUARD (IMPORTANT)
+    // =================================
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      // ❌ Token nahi → login page
+      window.location.href = "login.html";
+    } else {
+      // ✅ Token hai → dashboard allowed
+      document.getElementById("status").innerText =
+        "✅ You are logged in successfully";
+    }
+
+    // =================================
+    // Navigation helpers
+    // =================================
+    function goStudents() {
+      window.location.href = "students.html";
+    }
+
+    function goAddStudent() {
+      window.location.href = "add_edit_student.html";
+    }
+
+    // =================================
+    // Logout
+    // =================================
+    function logout() {
+      localStorage.removeItem("token");
+      alert("Logged out successfully");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>

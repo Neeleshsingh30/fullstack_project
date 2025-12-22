@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Database Management</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="home">
+
+  <div class="overlay"></div>
+
+  <div class="home-container">
+    <h1>Student Database Management System</h1>
+
+    <p>
+      A secure and modern platform to manage student records, authentication,
+      and academic data using FastAPI & PostgreSQL.
+    </p>
+
+    <!-- Buttons -->
+    <div class="home-buttons" id="authButtons">
+      <!-- JS se dynamic inject honge -->
+    </div>
+
+    <!-- Students section -->
+    <div id="studentSection" style="margin-top: 30px; display: none;">
+      <button class="btn" onclick="loadStudents()">Load Students</button>
+      <button class="btn outline" onclick="logout()">Logout</button>
+
+      <pre id="studentsOutput" style="margin-top:20px; text-align:left;"></pre>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+    const API_BASE_URL = "http://127.0.0.1:8000";
+    const token = localStorage.getItem("token");
+
+    const authButtons = document.getElementById("authButtons");
+    const studentSection = document.getElementById("studentSection");
+
+    // 🔐 Token check
+    if (token) {
+      authButtons.innerHTML = `
+        <p style="color:#7CFC00;">✅ Logged in</p>
+      `;
+      studentSection.style.display = "block";
+    } else {
+      authButtons.innerHTML = `
+        <a href="login.html" class="btn">Login</a>
+        <a href="signup.html" class="btn outline">Get Started</a>
+      `;
+    }
+
+    // 📡 Fetch students (Protected API)
+    async function loadStudents() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/students`, {
+          headers: {
+            Authorization: "Bearer " + token
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("Unauthorized");
+        }
+
+        const data = await response.json();
+        document.getElementById("studentsOutput").textContent =
+          JSON.stringify(data, null, 2);
+
+      } catch (error) {
+        alert("Session expired. Please login again.");
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
+    }
+
+    // 🚪 Logout
+    function logout() {
+      localStorage.removeItem("token");
+      alert("Logged out successfully");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>

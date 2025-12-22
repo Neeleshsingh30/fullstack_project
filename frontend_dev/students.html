@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Students</title>
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Background overlay -->
+  <div class="overlay"></div>
+
+  <!-- ===============================
+       DASHBOARD WRAPPER
+  ================================ -->
+  <div class="dashboard-wrapper">
+
+    <!-- ===============================
+         SIDEBAR
+    ================================ -->
+    <aside class="sidebar">
+      <h3>Dashboard</h3>
+
+      <a href="dashboard.html">🏠 Home</a>
+      <a href="students.html">👨‍🎓 Students</a>
+      <a href="add_edit_student.html">➕ Add Student</a>
+      <a href="#" onclick="logout()">🚪 Logout</a>
+    </aside>
+
+    <!-- ===============================
+         MAIN CONTENT
+    ================================ -->
+    <main class="main-content">
+
+      <!-- Topbar -->
+      <div class="topbar">
+        <h2>Students List</h2>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+
+      <!-- Students Table -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roll No</th>
+              <th>Department</th>
+              <th>Year</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTable">
+            <!-- Data injected by JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ===============================
+       SCRIPT
+  ================================ -->
+  <script>
+    const API = "http://127.0.0.1:8000";
+    const token = localStorage.getItem("token");
+
+    // ===============================
+    // AUTH GUARD
+    // ===============================
+    if (!token) {
+      window.location.href = "login.html";
+    }
+
+    // ===============================
+    // LOAD STUDENTS
+    // ===============================
+    async function loadStudents() {
+      const res = await fetch(`${API}/students`, {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      const data = await res.json();
+      renderTable(data);
+    }
+
+    // ===============================
+    // RENDER TABLE
+    // ===============================
+    function renderTable(students) {
+      const table = document.getElementById("studentsTable");
+      table.innerHTML = "";
+
+      students.forEach(s => {
+        table.innerHTML += `
+          <tr>
+            <td>${s.name}</td>
+            <td>${s.roll_no}</td>
+            <td>${s.department}</td>
+            <td>${s.year}</td>
+            <td class="${s.is_active ? 'status-active' : 'status-inactive'}">
+              ${s.is_active ? 'Active' : 'Inactive'}
+            </td>
+            <td>
+              <button class="action-btn edit-btn" onclick="editStudent(${s.id})">
+                Edit
+              </button>
+              <button class="action-btn delete-btn" onclick="deleteStudent(${s.id})">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // ===============================
+    // NAVIGATION
+    // ===============================
+    function editStudent(id) {
+      localStorage.setItem("editStudentId", id);
+      window.location.href = "add_edit_student.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+
+    // ===============================
+    // DELETE STUDENT
+    // ===============================
+    async function deleteStudent(id) {
+      if (!confirm("Are you sure you want to delete this student?")) return;
+
+      await fetch(`${API}/students/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      loadStudents();
+    }
+
+    // Auto load
+    loadStudents();
+  </script>
+
+</body>
+</html>

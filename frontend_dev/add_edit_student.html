@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add / Edit Student</title>
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Background overlay -->
+  <div class="overlay"></div>
+
+  <!-- ===============================
+       DASHBOARD WRAPPER
+  ================================ -->
+  <div class="dashboard-wrapper">
+
+    <!-- ===============================
+         SIDEBAR
+    ================================ -->
+    <aside class="sidebar">
+      <h3>Dashboard</h3>
+
+      <a href="dashboard.html">🏠 Home</a>
+      <a href="students.html">👨‍🎓 Students</a>
+      <a href="add_edit_student.html">➕ Add Student</a>
+      <a href="#" onclick="logout()">🚪 Logout</a>
+    </aside>
+
+    <!-- ===============================
+         MAIN CONTENT
+    ================================ -->
+    <main class="main-content">
+
+      <!-- Topbar -->
+      <div class="topbar">
+        <h2 id="pageTitle">Add Student</h2>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+
+      <!-- ===============================
+           FORM CARD
+      ================================ -->
+      <div class="form-card">
+
+        <input id="name" placeholder="Student Name">
+        <input id="roll_no" placeholder="Roll Number">
+        <input id="email" placeholder="Email">
+        <input id="department" placeholder="Department">
+        <input id="year" type="number" placeholder="Year">
+        <input id="phone" placeholder="Phone Number">
+
+        <select id="is_active">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+
+        <br><br>
+
+        <button onclick="saveStudent()">💾 Save Student</button>
+        <button class="btn outline" onclick="goBack()">⬅ Back</button>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ===============================
+       SCRIPT
+  ================================ -->
+  <script>
+    const API = "http://127.0.0.1:8000";
+    const token = localStorage.getItem("token");
+    const editId = localStorage.getItem("editStudentId");
+
+    // ===============================
+    // AUTH GUARD
+    // ===============================
+    if (!token) {
+      window.location.href = "login.html";
+    }
+
+    // ===============================
+    // EDIT MODE: LOAD STUDENT DATA
+    // ===============================
+    if (editId) {
+      document.getElementById("pageTitle").innerText = "Edit Student";
+      loadStudentForEdit(editId);
+    }
+
+    async function loadStudentForEdit(id) {
+      const res = await fetch(`${API}/students/${id}`, {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      const s = await res.json();
+
+      document.getElementById("name").value = s.name;
+      document.getElementById("roll_no").value = s.roll_no;
+      document.getElementById("email").value = s.email;
+      document.getElementById("department").value = s.department;
+      document.getElementById("year").value = s.year;
+      document.getElementById("phone").value = s.phone;
+      document.getElementById("is_active").value = s.is_active;
+    }
+
+    // ===============================
+    // SAVE (ADD / UPDATE)
+    // ===============================
+    async function saveStudent() {
+      const payload = {
+        name: name.value,
+        roll_no: roll_no.value,
+        email: email.value,
+        department: department.value,
+        year: parseInt(year.value),
+        phone: phone.value,
+        is_active: is_active.value === "true"
+      };
+
+      const url = editId
+        ? `${API}/students/${editId}`
+        : `${API}/students`;
+
+      const method = editId ? "PUT" : "POST";
+
+      await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(payload)
+      });
+
+      localStorage.removeItem("editStudentId");
+      alert("Student saved successfully ✅");
+      window.location.href = "students.html";
+    }
+
+    // ===============================
+    // NAVIGATION
+    // ===============================
+    function goBack() {
+      localStorage.removeItem("editStudentId");
+      window.location.href = "students.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>
