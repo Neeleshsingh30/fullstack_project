@@ -1,6 +1,6 @@
 # auth.py
 from passlib.context import CryptContext
-
+print("passlib working")
 # bcrypt hashing config
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
