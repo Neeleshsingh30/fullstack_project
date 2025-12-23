@@ -4,6 +4,7 @@ from jose import jwt, JWTError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
+
 # ================================
 # JWT CONFIG
 # ================================
