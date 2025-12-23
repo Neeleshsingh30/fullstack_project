@@ -35,6 +35,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # -------------------------------
 app = FastAPI(title="Student Management API with JWT Auth")
 
+
 # -------------------------------
 # CORS
 # -------------------------------
