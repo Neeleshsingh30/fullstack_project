@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://fullstack-project-10rd.onrender.com";
 
 document.getElementById("loginForm").addEventListener("submit", async function (e) {
   e.preventDefault();

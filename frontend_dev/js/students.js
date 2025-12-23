@@ -1,4 +1,4 @@
-const API = "http://127.0.0.1:8000";
+const API = "https://fullstack-project-10rd.onrender.com";
 
 async function loadStudents() {
   const res = await fetch(`${API}/students`);

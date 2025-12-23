@@ -1,4 +1,4 @@
-const BASE_URL = "https://fullstack-project-cg4r.onrender.com";
+const BASE_URL = "https://fullstack-project-10rd.onrender.com";
 
 fetch(`${BASE_URL}/students`)
   .then(res => res.json())

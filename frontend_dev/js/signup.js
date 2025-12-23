@@ -1,15 +1,16 @@
 // ===============================
-// SIGNUP.JS – Backend Connected
+// SIGNUP.JS – Backend Connected (UPDATED)
 // ===============================
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+// ✅ IMPORTANT: No extra space in URL
+const API_BASE_URL = "https://fullstack-project-10rd.onrender.com";
 
-// DOM ready check
+// DOM ready
 document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signupForm");
 
   if (!signupForm) {
-    console.error("Signup form not found");
+    console.error("❌ Signup form not found");
     return;
   }
 
@@ -18,8 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    const confirmPassword =
-      document.getElementById("confirmPassword")?.value.trim();
+    const confirmPassword = document.getElementById("confirmPassword")?.value.trim();
 
     // -------------------------------
     // BASIC VALIDATIONS
@@ -44,8 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          email: email,
-          password: password
+          email,
+          password
         })
       });
 
@@ -55,14 +55,15 @@ document.addEventListener("DOMContentLoaded", () => {
       // RESPONSE HANDLING
       // -------------------------------
       if (response.ok) {
-        alert("Signup successful! Please login.");
+        alert("✅ Signup successful! Please login.");
         window.location.href = "login.html";
       } else {
-        alert(data.detail || "Signup failed");
+        alert(data.detail || "❌ Signup failed");
       }
+
     } catch (error) {
-      console.error("Signup error:", error);
-      alert("Backend server not reachable");
+      console.error("❌ Signup error:", error);
+      alert("❌ Backend server not reachable");
     }
   });
 });
