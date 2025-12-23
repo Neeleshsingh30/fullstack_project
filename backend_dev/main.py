@@ -50,9 +50,16 @@ app.add_middleware(
 # -------------------------------
 # Create tables on startup
 # -------------------------------
+import os
+
 @app.on_event("startup")
 def on_startup():
-    Base.metadata.create_all(bind=engine)
+    if os.getenv("ENV") == "local":
+        Base.metadata.create_all(bind=engine)
+        print(" Tables created (local)")
+    else:
+        print(" Production start — DB migration skipped")
+
 
 # -------------------------------
 # DB Dependency
