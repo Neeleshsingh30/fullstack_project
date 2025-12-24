@@ -1,10 +1,10 @@
 // ===============================
-// LOGIN.JS — CLEAN VERSION
+// LOGIN.JS — FINAL PRODUCTION READY
 // ===============================
 
 const API_BASE_URL = "https://fullstack-project-10rd.onrender.com";
 
-// 🔐 Agar pehle se token hai → direct dashboard
+// 🔐 If token already exists, redirect to dashboard
 const existingToken = localStorage.getItem("token");
 if (existingToken) {
   window.location.href = "dashboard.html";
@@ -16,12 +16,14 @@ const loginMsg = document.getElementById("loginMsg");
 
 loginForm.addEventListener("submit", async function (e) {
   e.preventDefault();
+
   loginMsg.textContent = "Logging in...";
   loginMsg.style.color = "black";
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
+  // Basic validation
   if (!email || !password) {
     loginMsg.textContent = "Please fill all fields";
     loginMsg.style.color = "red";
@@ -29,32 +31,47 @@ loginForm.addEventListener("submit", async function (e) {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/login`, {
+    // 🔑 LOGIN API CALL
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
+      body: JSON.stringify({ email, password })
     });
 
-    const data = await response.json();
+    // ✅ STEP 4: Safe JSON parsing
+    let data = {};
+    try {
+      data = await response.json();
+    } catch {
+      data = {};
+    }
 
+    // ❌ Login failed
     if (!response.ok) {
-      loginMsg.textContent = data.detail || "Invalid credentials";
+      loginMsg.textContent =
+        data.detail || data.message || "Invalid credentials";
       loginMsg.style.color = "red";
       return;
     }
 
-    // ✅ TOKEN SAVE
-    localStorage.setItem("token", data.access_token);
+    // ✅ STEP 3: Safe token handling
+    const token = data.access_token || data.token;
+
+    if (!token) {
+      loginMsg.textContent = "Token not received from server";
+      loginMsg.style.color = "red";
+      return;
+    }
+
+    // ✅ Save token
+    localStorage.setItem("token", token);
 
     loginMsg.textContent = "Login successful ✔ Redirecting...";
     loginMsg.style.color = "green";
 
-    // ✅ REDIRECT TO DASHBOARD
+    // 🔁 Redirect to dashboard
     setTimeout(() => {
       window.location.href = "dashboard.html";
     }, 800);
