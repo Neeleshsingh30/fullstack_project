@@ -1,5 +1,5 @@
 // ===============================
-// SIGNUP.JS — FINAL FIXED VERSION
+// SIGNUP.JS — FINAL CORRECT VERSION
 // ===============================
 
 const API_BASE_URL = "https://fullstack-project-10rd.onrender.com";
@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      // ✅ CORRECT SIGNUP ENDPOINT
-      const response = await fetch(`${API_BASE_URL}/register`, {
+      // ✅ FIXED: correct backend endpoint
+      const response = await fetch(`${API_BASE_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -43,18 +43,19 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ email, password })
       });
 
-      // ✅ SAFE JSON PARSING
+      // ✅ Safe JSON parsing
       let data = {};
       try {
         data = await response.json();
       } catch {}
 
-      if (response.ok) {
-        alert("✅ Signup successful! Please login.");
-        window.location.href = "login.html";
-      } else {
-        alert(data.detail || data.message || "❌ Signup failed");
+      if (!response.ok) {
+        alert(data.detail || "❌ Signup failed");
+        return;
       }
+
+      alert("✅ Signup successful! Please login.");
+      window.location.href = "login.html";
 
     } catch (error) {
       console.error("❌ Signup error:", error);
