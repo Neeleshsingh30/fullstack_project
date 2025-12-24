@@ -1,4 +1,4 @@
-# 📚 Student Database Management System
+# Student Database Management System
 
 A **full-stack Student Database Management System** developed using **FastAPI, PostgreSQL, and Vanilla JavaScript**, focused on **secure authentication, student record management, and a clean dashboard UI**.
 
@@ -6,7 +6,7 @@ This project is built **from scratch**, covering backend API development, databa
 
 ---
 
-## 🎯 Project Objective
+## Project Objective
 
 The main goal of this project is to:
 
@@ -24,7 +24,7 @@ This project is suitable for:
 
 ---
 
-## 🛠️ Tech Stack Used
+## Tech Stack Used
 
 ### 🔹 Backend
 
@@ -44,7 +44,7 @@ This project is suitable for:
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 student-db-project/
@@ -75,7 +75,7 @@ student-db-project/
 
 ---
 
-## 🔐 Authentication Flow (Implemented)
+## Authentication Flow (Implemented)
 
 1. User registers using **Signup**
 2. User logs in using **Login**
@@ -90,16 +90,16 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-## ✨ Features Implemented
+## Features Implemented
 
-### ✅ Authentication
+### Authentication
 
 * User signup
 * User login
 * Password hashing
 * JWT token generation and validation
 
-### ✅ Student Management
+### Student Management
 
 * View all students
 * Add new student
@@ -107,7 +107,7 @@ Authorization: Bearer <JWT_TOKEN>
 * Delete student
 * Active / Inactive status handling
 
-### ✅ Dashboard
+### Dashboard
 
 * Protected dashboard (JWT required)
 * Sidebar navigation
@@ -117,16 +117,16 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-## 🔄 API Endpoints
+## API Endpoints
 
-### 🔐 Authentication APIs
+### Authentication APIs
 
 | Method | Endpoint  | Description       |
 | ------ | --------- | ----------------- |
 | POST   | `/signup` | Register new user |
 | POST   | `/login`  | Login and get JWT |
 
-### 👨‍🎓 Student APIs (JWT Protected)
+### Student APIs (JWT Protected)
 
 | Method | Endpoint           | Description       |
 | ------ | ------------------ | ----------------- |
@@ -139,9 +139,9 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-## ⚙️ Setup Instructions (From Scratch)
+## Setup Instructions (From Scratch)
 
-### 1️⃣ Clone Repository
+### Clone Repository
 
 ```bash
 git clone https://github.com/NeeleshSingh/student-db-project.git
@@ -150,7 +150,7 @@ cd student-db-project
 
 ---
 
-### 2️⃣ Backend Setup
+### Backend Setup
 
 #### Create virtual environment
 
@@ -177,10 +177,10 @@ Backend URL:
 http://127.0.0.1:8000
 ```
 
-Swagger Docs:
+Fronted URL :
 
 ```
-http://127.0.0.1:8000/docs
+https://fullstack-project-frontend-rj28.onrender.com
 ```
 
 ---
