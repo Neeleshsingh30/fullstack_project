@@ -84,18 +84,27 @@ def root():
 # -------------------------------
 # SIGNUP
 # -------------------------------
+# -------------------------------
+# SIGNUP
+# -------------------------------
 @app.post("/signup")
 def signup(user: UserCreate, db: Session = Depends(get_db)):
     try:
+        # 1️⃣ Check existing user
         existing_user = db.query(User).filter(User.email == user.email).first()
         if existing_user:
-            raise HTTPException(status_code=400, detail="Email already registered")
+            raise HTTPException(
+                status_code=400,
+                detail="Email already registered"
+            )
 
+        # 2️⃣ Hash password
         hashed_pwd = hash_password(user.password)
 
+        # 3️⃣ Create user (IMPORTANT FIX HERE)
         new_user = User(
             email=user.email,
-            hashed_password=hashed_pwd
+            password=hashed_pwd   # ✅ FIX (was hashed_password)
         )
 
         db.add(new_user)
@@ -106,12 +115,18 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
 
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=400, detail="Email already exists")
+        raise HTTPException(
+            status_code=400,
+            detail="Email already exists"
+        )
 
     except Exception as e:
         db.rollback()
         print("SIGNUP ERROR:", e)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(
+            status_code=500,
+            detail="Internal server error"
+        )
 
 # -------------------------------
 # LOGIN
