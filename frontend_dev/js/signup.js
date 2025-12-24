@@ -1,11 +1,9 @@
 // ===============================
-// SIGNUP.JS – Backend Connected (UPDATED)
+// SIGNUP.JS — FINAL FIXED VERSION
 // ===============================
 
-// ✅ IMPORTANT: No extra space in URL
 const API_BASE_URL = "https://fullstack-project-10rd.onrender.com";
 
-// DOM ready
 document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signupForm");
 
@@ -19,10 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword")?.value.trim();
+    const confirmPassword =
+      document.getElementById("confirmPassword")?.value.trim();
 
     // -------------------------------
-    // BASIC VALIDATIONS
+    // VALIDATIONS
     // -------------------------------
     if (!email || !password) {
       alert("Email and password are required");
@@ -34,31 +33,27 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // -------------------------------
-    // API CALL
-    // -------------------------------
     try {
-      const response = await fetch(`${API_BASE_URL}/signup`, {
+      // ✅ CORRECT SIGNUP ENDPOINT
+      const response = await fetch(`${API_BASE_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          email,
-          password
-        })
+        body: JSON.stringify({ email, password })
       });
 
-      const data = await response.json();
+      // ✅ SAFE JSON PARSING
+      let data = {};
+      try {
+        data = await response.json();
+      } catch {}
 
-      // -------------------------------
-      // RESPONSE HANDLING
-      // -------------------------------
       if (response.ok) {
         alert("✅ Signup successful! Please login.");
         window.location.href = "login.html";
       } else {
-        alert(data.detail || "❌ Signup failed");
+        alert(data.detail || data.message || "❌ Signup failed");
       }
 
     } catch (error) {

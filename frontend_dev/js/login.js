@@ -1,5 +1,5 @@
 // ===============================
-// LOGIN.JS — FINAL PRODUCTION READY
+// LOGIN.JS — FINAL FIXED VERSION
 // ===============================
 
 const API_BASE_URL = "https://fullstack-project-10rd.onrender.com";
@@ -23,7 +23,6 @@ loginForm.addEventListener("submit", async function (e) {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  // Basic validation
   if (!email || !password) {
     loginMsg.textContent = "Please fill all fields";
     loginMsg.style.color = "red";
@@ -31,8 +30,8 @@ loginForm.addEventListener("submit", async function (e) {
   }
 
   try {
-    // 🔑 LOGIN API CALL
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    // ✅ CONFIRMED LOGIN ENDPOINT
+    const response = await fetch(`${API_BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -40,15 +39,12 @@ loginForm.addEventListener("submit", async function (e) {
       body: JSON.stringify({ email, password })
     });
 
-    // ✅ STEP 4: Safe JSON parsing
+    // ✅ SAFE JSON PARSING
     let data = {};
     try {
       data = await response.json();
-    } catch {
-      data = {};
-    }
+    } catch {}
 
-    // ❌ Login failed
     if (!response.ok) {
       loginMsg.textContent =
         data.detail || data.message || "Invalid credentials";
@@ -56,22 +52,18 @@ loginForm.addEventListener("submit", async function (e) {
       return;
     }
 
-    // ✅ STEP 3: Safe token handling
     const token = data.access_token || data.token;
-
     if (!token) {
       loginMsg.textContent = "Token not received from server";
       loginMsg.style.color = "red";
       return;
     }
 
-    // ✅ Save token
     localStorage.setItem("token", token);
 
     loginMsg.textContent = "Login successful ✔ Redirecting...";
     loginMsg.style.color = "green";
 
-    // 🔁 Redirect to dashboard
     setTimeout(() => {
       window.location.href = "dashboard.html";
     }, 800);
