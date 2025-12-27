@@ -17,7 +17,7 @@ class Student(Base):
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
-# user model for authentication
+
 class User(Base):
     __tablename__ = "users"
 
